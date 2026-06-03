@@ -1,5 +1,6 @@
 from sentence_transformers import SentenceTransformer
 from sklearn.neighbors import NearestNeighbors
+import streamlit as st
 
 model = None
 embeddings = None
@@ -7,10 +8,16 @@ nn_index = None
 docs_store = None
 
 
+@st.cache_resource
+def load_sentence_transformer():
+    """Load model once and cache it"""
+    return SentenceTransformer("all-MiniLM-L6-v2")
+
+
 def build_index(docs):
     global model, embeddings, nn_index, docs_store
     docs_store = docs
-    model = SentenceTransformer("all-MiniLM-L6-v2")
+    model = load_sentence_transformer()
     embeddings = model.encode(docs)
     nn_index = NearestNeighbors(metric="cosine").fit(embeddings)
 

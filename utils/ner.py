@@ -6,7 +6,14 @@ import streamlit as st
 # Load model (cached to prevent reloading)
 @st.cache_resource
 def load_spacy_model():
-    return spacy.load("en_core_web_sm")
+    try:
+        return spacy.load("en_core_web_sm")
+    except OSError:
+        # If model not found, download it
+        import os
+
+        os.system("python -m spacy download en_core_web_sm")
+        return spacy.load("en_core_web_sm")
 
 
 nlp = load_spacy_model()

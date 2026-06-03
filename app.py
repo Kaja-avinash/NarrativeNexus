@@ -8,24 +8,35 @@ from streamlit_lottie import st_lottie  # Lottie Component
 st.set_page_config(page_title="NarrativeNexus Pro", layout="wide", page_icon="🧠")
 # ------------------------------------------------------------------------
 
+# Ensure required models and data are downloaded on startup
+import nltk
+
+nltk.download("punkt", quiet=True)
+nltk.download("stopwords", quiet=True)
+nltk.download("wordnet", quiet=True)
+
 import pandas as pd
 import streamlit.components.v1 as components
 
 # --- Import Utils ---
-from utils.file_utils import read_file
-from utils.preprocessing import preprocess_text
-from utils.topic_modeling import extract_topics, generate_pyldavis
-from utils.summarizer import summarize
-from utils.sentiment import get_sentiment
-from utils.visualization import show_wordcloud, plot_similarity_heatmap, show_card
-from utils.cosine_sim import compute_cosine_similarity
-from utils.semantic_search import build_index, query
-from utils.language import detect_language
-from utils.translate import translate_to_english
-from utils.report import generate_pdf
-from utils.ner import highlight_entities
-from utils.graph import generate_knowledge_graph
-from utils.visualization import plot_3d_document_space
+try:
+    from utils.file_utils import read_file
+    from utils.preprocessing import preprocess_text
+    from utils.topic_modeling import extract_topics, generate_pyldavis
+    from utils.summarizer import summarize
+    from utils.sentiment import get_sentiment
+    from utils.visualization import show_wordcloud, plot_similarity_heatmap, show_card
+    from utils.cosine_sim import compute_cosine_similarity
+    from utils.semantic_search import build_index, query
+    from utils.language import detect_language
+    from utils.translate import translate_to_english
+    from utils.report import generate_pdf
+    from utils.ner import highlight_entities
+    from utils.graph import generate_knowledge_graph
+    from utils.visualization import plot_3d_document_space
+except Exception as e:
+    st.error(f"Error loading utilities: {str(e)}")
+    st.stop()
 
 
 # ------------------ ANIMATION FUNCTIONS ------------------
