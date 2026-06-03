@@ -1,0 +1,9 @@
+[client]
+showErrorDetails = true
+showWarningOnDirectExecution = false
+
+[logger]
+level = "info"
+
+[browser]
+gatherUsageStats = false
