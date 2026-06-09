@@ -151,13 +151,87 @@ st.markdown("""
     100% { transform: translateY(-100vh) scale(0.5) rotate(360deg); opacity: 0; }
 }
 
-/* ═══════════════════════ SIDEBAR ══════════════════════════════════════════ */
-[data-testid="stSidebar"] {
+/* ═══════════════════════ PERMANENT FIXED SIDEBAR ══════════════════════════
+ *
+ * Power-BI / Azure-Portal style: sidebar is ALWAYS visible, NEVER collapsible.
+ *
+ * Key techniques:
+ *   1. position: fixed + explicit width locks (300–320 px)
+ *   2. transform: translateX(0) !important — prevents Streamlit's collapse anim
+ *   3. Collapsed-state overrides (aria-expanded="false") keep full width
+ *   4. All toggle/control buttons are hidden (display:none)
+ *   5. Main content gets margin-left = sidebar width so it never underlaps
+ * ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Core sidebar panel ──────────────────────────────────────────────────── */
+[data-testid="stSidebar"],
+section[data-testid="stSidebar"] {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    width: 310px !important;
+    min-width: 300px !important;
+    max-width: 320px !important;
+    z-index: 1000 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    /* Enterprise gradient background */
     background: linear-gradient(180deg, #0D0820 0%, var(--nn-surface) 100%) !important;
     border-right: 1px solid var(--nn-border) !important;
-    box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+    box-shadow: 4px 0 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(123,43,255,0.12) !important;
+    /* Kill ALL collapse animation */
+    transform: translateX(0px) !important;
+    transition: none !important;
 }
-[data-testid="stSidebar"] > div { padding-top: 0 !important; }
+
+/* ── Collapsed-state override: keep full width even if aria-expanded=false ── */
+[data-testid="stSidebar"][aria-expanded="false"],
+section[data-testid="stSidebar"][aria-expanded="false"] {
+    width: 310px !important;
+    min-width: 300px !important;
+    transform: translateX(0px) !important;
+    visibility: visible !important;
+    display: block !important;
+}
+
+/* ── Inner content padding ───────────────────────────────────────────────── */
+[data-testid="stSidebar"] > div:first-child {
+    padding-top: 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+/* ── Scrollbar styling for sidebar ─────────────────────────────────────── */
+[data-testid="stSidebar"]::-webkit-scrollbar { width: 4px; }
+[data-testid="stSidebar"]::-webkit-scrollbar-track { background: transparent; }
+[data-testid="stSidebar"]::-webkit-scrollbar-thumb {
+    background: var(--nn-border);
+    border-radius: 2px;
+}
+
+/* ── Main content area offset (must match sidebar width) ─────────────────── */
+[data-testid="stAppViewContainer"] > section.main,
+.main.css-uf99v8,
+.main {
+    margin-left: 310px !important;
+    padding-left: 1rem !important;
+    width: calc(100% - 310px) !important;
+    max-width: calc(100% - 310px) !important;
+}
+
+/* ── App-view container offset ───────────────────────────────────────────── */
+[data-testid="stAppViewContainer"] {
+    padding-left: 310px !important;
+}
+
+/* ── Block container (inner content padding) ─────────────────────────────── */
+.block-container {
+    max-width: 100% !important;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+}
 
 /* ═══════════════════════ NAV ITEMS ════════════════════════════════════════ */
 .nn-nav-item {
@@ -691,46 +765,59 @@ st.markdown("""
     .nn-card { padding: 16px; }
 }
 
-/* ═══════════════════════ HIDE STREAMLIT DEFAULTS ═══════════════════════════ */
-/*
- * IMPORTANT: Do NOT hide stHeader or collapsedControl.
- * stHeader contains the sidebar toggle button; hiding it locks users out
- * of the sidebar permanently after it is collapsed.
+/* ═══════════════════════ CLEAN UP STREAMLIT CHROME ═════════════════════════
  *
- * Safe to hide: hamburger menu, footer, deploy button.
- * Must keep: stHeader frame, collapsedControl (sidebar toggle).
- */
-#MainMenu { visibility: hidden; }
-footer { visibility: hidden; }
-.stDeployButton { display: none; }
+ * PERMANENT SIDEBAR MODE — no collapsible controls needed.
+ *
+ * Hide: hamburger menu, footer, deploy badge, top toolbar,
+ *        collapse button, sidebar-collapsed-control button.
+ * Show: header frame (transparent) so it doesn't visually intrude.
+ * ═══════════════════════════════════════════════════════════════════════════ */
 
-/* Keep the header visible but make it transparent so it blends with our theme */
+/* Decorative chrome we don't need */
+#MainMenu { visibility: hidden; }
+footer    { visibility: hidden; }
+.stDeployButton { display: none !important; }
+[data-testid="stToolbar"] { display: none !important; }
+
+/* Header: keep it in the DOM (it contains layout anchors) but make invisible */
 header[data-testid="stHeader"] {
     background: transparent !important;
     border-bottom: none !important;
+    box-shadow: none !important;
+    pointer-events: none !important;
 }
 
-/* Preserve the sidebar toggle button — NEVER hide this */
-[data-testid="collapsedControl"] {
-    display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    color: var(--nn-text) !important;
-}
-
-/* Hide only the top-right Streamlit toolbar status/decoration (not the collapse button) */
-[data-testid="stToolbar"] {
+/* ── Hide ALL sidebar toggle / collapse controls ──────────────────────────
+ * In permanent-sidebar mode there is nothing to toggle, so we remove
+ * every control Streamlit might render for collapse/expand.
+ * ─────────────────────────────────────────────────────────────────────── */
+[data-testid="collapsedControl"],
+[data-testid="stSidebarCollapsedControl"],
+button[aria-label="Close sidebar"],
+button[aria-label="Open sidebar"],
+button[aria-label="Collapse sidebar"],
+button[aria-label="Expand sidebar"],
+[data-testid="stSidebar"] button[kind="header"] {
     display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
 }
 
-/* Ensure the sidebar itself is always accessible */
-[data-testid="stSidebar"][aria-expanded="false"] {
-    min-width: 0 !important;
-    width: 0 !important;
-}
-[data-testid="stSidebarCollapsedControl"] {
-    display: flex !important;
+/* ── Belt-and-suspenders anti-collapse guard ─────────────────────────────
+ * Even if JavaScript tries to set aria-expanded=false or apply an
+ * inline transform, these rules override it at CSS specificity level.
+ * ─────────────────────────────────────────────────────────────────────── */
+[data-testid="stSidebar"] {
+    transform: translateX(0px) !important;
+    width: 310px !important;
+    min-width: 300px !important;
+    max-width: 320px !important;
     visibility: visible !important;
+    display: block !important;
     opacity: 1 !important;
 }
 </style>

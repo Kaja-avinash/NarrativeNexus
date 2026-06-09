@@ -1,25 +1,33 @@
-/* GLOBAL BACKGROUND */
+/* ══════════════════════════════════════════════════════════════════════════════
+   NarrativeNexus — custom.css
+   Loaded AFTER the main inline <style> block in app.py.
+   These rules act as both UI polish and a hard enforcement layer for the
+   permanent fixed-sidebar layout.
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* ─── GLOBAL BACKGROUND ──────────────────────────────────────────────────── */
 .stApp {
   background: radial-gradient(circle at top left, #3a0066, #0f001f 70%);
   color: #eee7ff;
   font-family: "Segoe UI", sans-serif;
 }
 
-/* CONTENT CONTAINER */
+/* ─── CONTENT CONTAINER ──────────────────────────────────────────────────── */
 .block-container {
   padding: 1.5rem 2rem;
+  max-width: 100% !important;
 }
 
-/* GLASS CARD */
+/* ─── GLASS CARD ─────────────────────────────────────────────────────────── */
 .glass-card {
   background: rgba(255, 255, 255, 0.08);
   -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);  
+  backdrop-filter: blur(12px);
   border-radius: 18px;
   padding: 18px;
   margin-bottom: 14px;
-  border: 1px solid rgba(255,255,255,0.15);
-  box-shadow: 0 8px 30px rgba(0,0,0,0.35);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
 }
 
 .card-title {
@@ -33,8 +41,8 @@
   font-size: 13px;
 }
 
-/* BUTTONS */
-.stButton>button {
+/* ─── BUTTONS ────────────────────────────────────────────────────────────── */
+.stButton > button {
   background: linear-gradient(90deg, #7b2bff, #c67bff) !important;
   color: white !important;
   border-radius: 12px;
@@ -44,56 +52,97 @@
   transition: 0.2s ease;
 }
 
-.stButton>button:hover {
+.stButton > button:hover {
   transform: scale(1.03);
   box-shadow: 0 0 15px rgba(198, 123, 255, 0.5);
 }
 
-/* FILE UPLOADER */
-.stFileUploader>div {
-  background: rgba(255,255,255,0.05);
+/* ─── FILE UPLOADER ──────────────────────────────────────────────────────── */
+.stFileUploader > div {
+  background: rgba(255, 255, 255, 0.05);
   padding: 12px;
   border-radius: 14px;
-  border: 1px dashed rgba(255,255,255,0.2);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
 }
 
+/* ─── TEXT INPUT ─────────────────────────────────────────────────────────── */
 textarea, input {
-  background-color: rgba(255,255,255,0.05) !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
   color: #fff !important;
   border-radius: 10px !important;
-  border: 1px solid rgba(255,255,255,0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
-/* ═══════════════════════════════════════════════════
-   PERMANENT SIDEBAR MODE
-   ═══════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════════════════════════════════════
+   PERMANENT FIXED SIDEBAR — ENFORCEMENT LAYER
+   ──────────────────────────────────────────────────────────────────────────
+   This block mirrors the rules in app.py and acts as a second layer of
+   enforcement. Because custom.css is loaded AFTER app.py's inline styles,
+   these rules win on cascade order conflicts.
 
-/* Keep Streamlit header visible */
+   NEVER add collapsedControl "display: flex" or "visibility: visible" here.
+   NEVER add translateX(-anything) here.
+   These are one-way, no-collapse rules only.
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* 1. Pin the sidebar panel */
+[data-testid="stSidebar"],
+section[data-testid="stSidebar"] {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  height: 100vh !important;
+  width: 310px !important;
+  min-width: 300px !important;
+  max-width: 320px !important;
+  z-index: 1000 !important;
+  transform: translateX(0px) !important;
+  visibility: visible !important;
+  display: block !important;
+  opacity: 1 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* 2. Collapsed state: same as expanded — sidebar never shrinks */
+[data-testid="stSidebar"][aria-expanded="false"],
+section[data-testid="stSidebar"][aria-expanded="false"] {
+  width: 310px !important;
+  min-width: 300px !important;
+  transform: translateX(0px) !important;
+  visibility: visible !important;
+  display: block !important;
+}
+
+/* 3. Kill ALL toggle / collapse controls */
+[data-testid="collapsedControl"],
+[data-testid="stSidebarCollapsedControl"],
+button[aria-label="Close sidebar"],
+button[aria-label="Open sidebar"],
+button[aria-label="Collapse sidebar"],
+button[aria-label="Expand sidebar"] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* 4. Keep Streamlit header transparent — it must stay in DOM for layout */
 header[data-testid="stHeader"] {
   display: block !important;
   visibility: visible !important;
   background: transparent !important;
   border-bottom: none !important;
   box-shadow: none !important;
+  pointer-events: none !important;
 }
 
-/* Fixed sidebar width */
-[data-testid="stSidebar"] {
-  min-width: 320px !important;
-  width: 320px !important;
-  max-width: 320px !important;
+/* 5. Main content offset to match sidebar width */
+[data-testid="stAppViewContainer"] > section.main,
+.main {
+  margin-left: 310px !important;
+  width: calc(100% - 310px) !important;
 }
 
-/* Hide ALL collapse/expand controls */
-[data-testid="collapsedControl"] {
-  display: none !important;
-}
-
-[data-testid="stSidebarCollapsedControl"] {
-  display: none !important;
-}
-
-/* Prevent collapse animation */
-section[data-testid="stSidebar"] {
-  transform: translateX(0px) !important;
+[data-testid="stAppViewContainer"] {
+  padding-left: 310px !important;
 }
