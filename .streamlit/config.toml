@@ -8,7 +8,7 @@ enableWebsocketCompression = true
 [client]
 showErrorDetails = false
 showWarningOnDirectExecution = false
-toolbarMode = "minimal"
+toolbarMode = "auto"
 
 [logger]
 level = "warning"
