@@ -1,6 +1,65 @@
-venv/
+# Python
 __pycache__/
-*.pyc
-uploaded_files/
+*.py[cod]
+*$py.class
+*.so
+.Python
 .env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Distribution / packaging
+.eggs/
+*.egg-info/
+dist/
+build/
+wheels/
+
+# Uploads (don't commit user files)
+uploaded_files/*
+!uploaded_files/.gitkeep
+
+# Streamlit
+.streamlit/secrets.toml
+
+# ML Models cache (too large for git)
+*.bin
+*.safetensors
+*.ckpt
+.cache/
+cache/
+huggingface/
+transformers_cache/
+
+# LDA visualization (generated)
+lda_visualization.html
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
 .DS_Store
+Thumbs.db
+desktop.ini
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Azure (keep structure but not secrets)
+.azure/
+
+# Jupyter
+.ipynb_checkpoints/

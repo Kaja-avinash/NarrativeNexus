@@ -1,9 +1,26 @@
+[server]
+headless = true
+enableCORS = false
+enableXsrfProtection = false
+maxUploadSize = 50
+enableWebsocketCompression = true
+
 [client]
-showErrorDetails = true
+showErrorDetails = false
 showWarningOnDirectExecution = false
+toolbarMode = "minimal"
 
 [logger]
-level = "info"
+level = "warning"
 
 [browser]
 gatherUsageStats = false
+serverAddress = "0.0.0.0"
+
+[theme]
+base = "dark"
+primaryColor = "#7B2BFF"
+backgroundColor = "#0B0618"
+secondaryBackgroundColor = "#12082A"
+textColor = "#E8E8F0"
+font = "sans serif"
