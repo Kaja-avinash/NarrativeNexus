@@ -65,12 +65,10 @@ textarea, input {
 }
 
 /* ═══════════════════════════════════════════════════
- * SIDEBAR TOGGLE SAFETY GUARDS
- * Never hide the header or collapsedControl.
- * These rules protect against accidental overwrites.
- * ═══════════════════════════════════════════════════ */
+   PERMANENT SIDEBAR MODE
+   ═══════════════════════════════════════════════════ */
 
-/* Keep Streamlit header visible (transparent background) */
+/* Keep Streamlit header visible */
 header[data-testid="stHeader"] {
   display: block !important;
   visibility: visible !important;
@@ -79,10 +77,23 @@ header[data-testid="stHeader"] {
   box-shadow: none !important;
 }
 
-/* Force sidebar collapse/expand toggle to always be visible */
-[data-testid="collapsedControl"],
+/* Fixed sidebar width */
+[data-testid="stSidebar"] {
+  min-width: 320px !important;
+  width: 320px !important;
+  max-width: 320px !important;
+}
+
+/* Hide ALL collapse/expand controls */
+[data-testid="collapsedControl"] {
+  display: none !important;
+}
+
 [data-testid="stSidebarCollapsedControl"] {
-  display: flex !important;
-  visibility: visible !important;
-  opacity: 1 !important;
+  display: none !important;
+}
+
+/* Prevent collapse animation */
+section[data-testid="stSidebar"] {
+  transform: translateX(0px) !important;
 }
