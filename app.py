@@ -692,11 +692,47 @@ st.markdown("""
 }
 
 /* ═══════════════════════ HIDE STREAMLIT DEFAULTS ═══════════════════════════ */
+/*
+ * IMPORTANT: Do NOT hide stHeader or collapsedControl.
+ * stHeader contains the sidebar toggle button; hiding it locks users out
+ * of the sidebar permanently after it is collapsed.
+ *
+ * Safe to hide: hamburger menu, footer, deploy button.
+ * Must keep: stHeader frame, collapsedControl (sidebar toggle).
+ */
 #MainMenu { visibility: hidden; }
 footer { visibility: hidden; }
 .stDeployButton { display: none; }
-[data-testid="stToolbar"] { display: none; }
-header[data-testid="stHeader"] { display: none; }
+
+/* Keep the header visible but make it transparent so it blends with our theme */
+header[data-testid="stHeader"] {
+    background: transparent !important;
+    border-bottom: none !important;
+}
+
+/* Preserve the sidebar toggle button — NEVER hide this */
+[data-testid="collapsedControl"] {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    color: var(--nn-text) !important;
+}
+
+/* Hide only the top-right Streamlit toolbar status/decoration (not the collapse button) */
+[data-testid="stToolbar"] {
+    display: none !important;
+}
+
+/* Ensure the sidebar itself is always accessible */
+[data-testid="stSidebar"][aria-expanded="false"] {
+    min-width: 0 !important;
+    width: 0 !important;
+}
+[data-testid="stSidebarCollapsedControl"] {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
