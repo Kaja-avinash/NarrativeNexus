@@ -57,10 +57,32 @@
   border: 1px dashed rgba(255,255,255,0.2);
 }
 
-/* TEXT INPUT */
 textarea, input {
   background-color: rgba(255,255,255,0.05) !important;
   color: #fff !important;
   border-radius: 10px !important;
   border: 1px solid rgba(255,255,255,0.2) !important;
+}
+
+/* ═══════════════════════════════════════════════════
+ * SIDEBAR TOGGLE SAFETY GUARDS
+ * Never hide the header or collapsedControl.
+ * These rules protect against accidental overwrites.
+ * ═══════════════════════════════════════════════════ */
+
+/* Keep Streamlit header visible (transparent background) */
+header[data-testid="stHeader"] {
+  display: block !important;
+  visibility: visible !important;
+  background: transparent !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+/* Force sidebar collapse/expand toggle to always be visible */
+[data-testid="collapsedControl"],
+[data-testid="stSidebarCollapsedControl"] {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
