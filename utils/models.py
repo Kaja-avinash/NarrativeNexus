@@ -51,8 +51,7 @@ def load_summarizer():
             tokenizer=SUMMARIZER_MODEL,
         )
 
-    except Exception as e:
-        st.warning(f"⚠️ Summarizer unavailable: {e}")
+    except Exception:
         return None
 
 
