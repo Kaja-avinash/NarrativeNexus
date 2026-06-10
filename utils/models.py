@@ -45,11 +45,11 @@ def load_summarizer():
     try:
         from transformers import pipeline
 
-        summarizer = pipeline(
-            task="summarization", model=SUMMARIZER_MODEL, tokenizer=SUMMARIZER_MODEL
+        return pipeline(
+            task="summarization",
+            model=SUMMARIZER_MODEL,
+            tokenizer=SUMMARIZER_MODEL,
         )
-
-        return summarizer
 
     except Exception as e:
         st.warning(f"⚠️ Summarizer unavailable: {e}")

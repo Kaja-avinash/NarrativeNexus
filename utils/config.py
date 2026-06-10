@@ -3,6 +3,7 @@
 Centralized configuration for NarrativeNexus AI
 All constants, limits, and feature flags live here.
 """
+
 import os
 
 # ── App Identity ─────────────────────────────────────────────────────────────
@@ -29,9 +30,26 @@ MAX_FILES = 20
 UPLOAD_DIR = "uploaded_files"
 
 SUPPORTED_FORMATS = [
-    "txt", "pdf", "docx", "doc", "csv", "xlsx", "xls",
-    "json", "html", "htm", "md", "rtf", "xml",
-    "pptx", "epub", "jpg", "jpeg", "png", "bmp", "tiff"
+    "txt",
+    "pdf",
+    "docx",
+    "doc",
+    "csv",
+    "xlsx",
+    "xls",
+    "json",
+    "html",
+    "htm",
+    "md",
+    "rtf",
+    "xml",
+    "pptx",
+    "epub",
+    "jpg",
+    "jpeg",
+    "png",
+    "bmp",
+    "tiff",
 ]
 
 # ── NLP Settings ─────────────────────────────────────────────────────────────
@@ -49,22 +67,30 @@ SEMANTIC_TOP_K = 5
 
 # ── Supported Languages ───────────────────────────────────────────────────────
 SUPPORTED_LANGUAGES = {
-    "en": "English", "es": "Spanish", "fr": "French",
-    "de": "German", "it": "Italian", "pt": "Portuguese",
-    "zh-cn": "Chinese", "ja": "Japanese", "ar": "Arabic",
-    "hi": "Hindi", "ru": "Russian", "ko": "Korean",
+    "en": "English",
+    "es": "Spanish",
+    "fr": "French",
+    "de": "German",
+    "it": "Italian",
+    "pt": "Portuguese",
+    "zh-cn": "Chinese",
+    "ja": "Japanese",
+    "ar": "Arabic",
+    "hi": "Hindi",
+    "ru": "Russian",
+    "ko": "Korean",
 }
 
 # ── Feature Flags ─────────────────────────────────────────────────────────────
-FEATURE_TRANSLATION = True      # Gracefully degrades if model unavailable
-FEATURE_OCR = True              # Gracefully degrades if tesseract not installed
+FEATURE_TRANSLATION = True  # Gracefully degrades if model unavailable
+FEATURE_OCR = True  # Gracefully degrades if tesseract not installed
 FEATURE_3D_MAP = True
 FEATURE_KNOWLEDGE_GRAPH = True
 FEATURE_COMPARISON = True
 
 # ── Cache Settings ────────────────────────────────────────────────────────────
-MODEL_CACHE_TTL = 3600          # seconds
-SESSION_HISTORY_MAX = 20        # max history items
+MODEL_CACHE_TTL = 3600  # seconds
+SESSION_HISTORY_MAX = 20  # max history items
 
 # ── Entity Types for Graph ────────────────────────────────────────────────────
 ENTITY_TYPES = {
@@ -84,6 +110,6 @@ DEBUG = os.environ.get("DEBUG", "false").lower() == "true"
 
 # ── Model IDs ────────────────────────────────────────────────────────────────
 SUMMARIZER_MODEL = "sshleifer/distilbart-cnn-12-6"
-SUMMARIZER_REVISION = "a4f8f3e"
+SUMMARIZER_REVISION = None
 SENTENCE_TRANSFORMER_MODEL = "all-MiniLM-L6-v2"
 SPACY_MODEL = "en_core_web_sm"
